@@ -17,11 +17,16 @@ if [[ "$*" == npm*start* ]]; then
 		fi
 	done
 
-	if [ ! -e "$GHOST_CONTENT/config.js" ]; then
-		sed -r '
-			s/127\.0\.0\.1/0.0.0.0/g;
-			s!path.join\(__dirname, (.)/content!path.join(process.env.GHOST_CONTENT, \1!g;
-		' "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
+	if [ -z "$GHOST_CONFIG_SECRET"]; then
+		if [ ! -e "$GHOST_CONTENT/config.js" ]; then
+			sed -r '
+				s/127\.0\.0\.1/0.0.0.0/g;
+				s!path.join\(__dirname, (.)/content!path.join(process.env.GHOST_CONTENT, \1!g;
+			' "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
+		fi
+	else
+		echo "Using configuration from Kubernetes Secret"
+		cp -f "$GHOST_CONFIG_SECRET" $GHOST_CONTENT/config.js;
 	fi
 fi
 
