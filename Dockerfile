@@ -49,5 +49,5 @@ VOLUME $GHOST_CONTENT
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 2368
+EXPOSE 2368 8080
 CMD ["npm", "start", "--production"]

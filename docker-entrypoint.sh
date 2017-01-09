@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+chown -R user /usr/src/ghost/content/
+
 # allow the container to be started with `--user`
 if [[ "$*" == npm*start* ]] && [ "$(id -u)" = '0' ]; then
 	chown -R user "$GHOST_CONTENT"
@@ -17,7 +19,7 @@ if [[ "$*" == npm*start* ]]; then
 		fi
 	done
 
-	if [ -z "$GHOST_CONFIG_SECRET"]; then
+	if [ -z "$GHOST_CONFIG_SECRET" ]; then
 		if [ ! -e "$GHOST_CONTENT/config.js" ]; then
 			sed -r '
 				s/127\.0\.0\.1/0.0.0.0/g;
